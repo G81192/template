@@ -27,7 +27,7 @@ if REDIS_CLUSTER:
 else:
     CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
 
-CELERY_RESULT_BACKEND = 'db+mysql://root:root@127.0.0.1:3306/moss'
+CELERY_RESULT_BACKEND = 'db+mysql://root:root@127.0.0.1:3306/template'
 CELERY_TASK_RESULT_EXPIRES = 0
 CELERY_RESULT_DB_TABLENAMES = {
     'task': 'celery_taskmeta',
