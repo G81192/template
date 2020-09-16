@@ -8,7 +8,7 @@
 @desc:
 """
 
-LOG_DIR = 'E:\\project\\logs\\moss\\'
+LOG_DIR = '/template/logs/'
 
 SQLALCHEMY_DATABASE_URI = ''
 SQLALCHEMY_BINDS = {
