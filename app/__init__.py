@@ -90,9 +90,6 @@ logging.config.dictConfig({
 from app.util import Util
 
 celery = Util.make_celery(app)
-
-from app.services.framework.task_pool import TaskPool
-
 from app.views.framework.base_view import baseProfile
 app.register_blueprint(baseProfile, url_prefix='/')
 
