@@ -38,5 +38,7 @@ class TemplateTest(Resource):
     @swagger_api.expect(get_parser, validate=True)
     def get(self):
         params = request.values.get("params")
-        ret = {"data": params}
+        ret = dict()
+        ret.update(ErrorCode.SUCCESS_R.value)
+        ret["data"] = params
         return jsonify(ret)
