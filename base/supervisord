@@ -1,0 +1,56 @@
+[supervisord]
+nodaemon=true
+logfile=/moss/logs/supervisord.log ; (main log file;default $CWD/supervisord.log)
+logfile_maxbytes=1024MB         ; (max main logfile bytes b4 rotation;default 50MB)
+logfile_backups=10            ; (num of main logfile rotation backups;default 10)
+loglevel=info                ; (log level;default info; others: debug,warn,trace)
+minfds=1024                   ; (min. avail startup file descriptors;default 1024)
+minprocs=200                  ; (min. avail process descriptors;default 200)
+user=root                     ; (default is current user, required if root)
+childlogdir=/moss/logs/            ; ('AUTO' child log dir, default $TEMP)
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[unix_http_server]
+file=/var/run/supervisor.sock
+
+[supervisorctl]
+serverurl=unix:///var/run/supervisor.sock ; use a unix:// URL  for a unix socket
+
+
+
+
+[program:moss]
+directory=/moss
+command=/usr/local/bin/python /usr/local/bin/gunicorn -w 2 --threads 4 -b 0.0.0.0:8080 app:app --timeout 60 --reload --log-level info
+autostart=true
+redirect_stderr=true
+stdout_logfile=/moss/logs/gunicorn.log
+stdout_logfile_maxbytes=1024MB  ; stdout 日志文件大小，默认50MB
+stdout_logfile_backups = 5  ; stdout 日志文件备份数，默认是10
+
+
+[program:celery-worker-asyncFunction]
+directory=/moss
+command=python /moss/celery_worker.py
+autostart=true
+redirect_stderr=true
+loglevel=info
+stdout_logfile=/moss/logs/celery-worker-asyncFunction.log
+stdout_logfile_maxbytes=1024MB  ; stdout 日志文件大小，默认50MB
+stdout_logfile_backups = 5   ; stdout 日志文件备份数，默认是10
+
+
+[program:celery-worker-cronJob]
+directory=/moss
+command=python /moss/celery_beat.py
+autostart=true
+redirect_stderr=true
+loglevel=info
+stdout_logfile=/moss/logs/celery-worker-cronJob.log
+stdout_logfile_maxbytes=1024MB  ; stdout 日志文件大小，默认50MB
+stdout_logfile_backups = 5   ; stdout 日志文件备份数，默认是10
+
+
+
